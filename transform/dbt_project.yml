@@ -1,0 +1,21 @@
+name: 'flight_dbt'
+version: '1.0.0'
+profile: 'flight_dbt'
+
+model-paths: ["models"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  flight_dbt:
+    staging:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: marts
+      reporting:
+        +materialized: view
+        +schema: reporting

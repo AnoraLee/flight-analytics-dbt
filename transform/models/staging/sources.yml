@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: skytrax_raw
+    database: FLIGHTS_DW
+    schema: RAW
+    tables:
+      - name: RAW_AIRLINES
+      - name: RAW_AIRPORTS
+      - name: RAW_AIRLINE_REVIEWS
+      - name: RAW_AIRPORT_REVIEWS
+      - name: RAW_LOUNGE_REVIEWS
+      - name: RAW_SEAT_REVIEWS

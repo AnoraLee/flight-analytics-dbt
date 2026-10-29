@@ -1,0 +1,23 @@
+SELECT
+    REVIEW_ID AS review_id,
+    AIRLINE_ID AS airline_id,
+    NULLIF(TRIM(LOUNGE_NAME), '') AS lounge_name,
+    NULLIF(TRIM(AIRPORT), '') AS airport,
+    NULLIF(TRIM(TYPE_OF_LOUNGE), '') AS type_of_lounge,
+    NULLIF(TRIM(TYPE_OF_TRAVELLER), '') AS type_of_traveller,
+    CAST(VERIFY AS BOOLEAN) AS is_verified,
+    CAST(DATE_SUBMITTED AS DATE) AS date_submitted,
+    CAST(DATE_VISIT AS DATE) AS date_visit,
+    NULLIF(TRIM(CUSTOMER_NAME), '') AS customer_name,
+    NULLIF(TRIM(NATIONALITY), '') AS nationality,
+    NULLIF(TRIM(REVIEW), '') AS review_text,
+    NULLIF(COMFORT, 0) AS comfort,
+    NULLIF(CLEANLINESS, 0) AS cleanliness,
+    NULLIF(BAR_AND_BEVERAGES, 0) AS bar_and_beverages,
+    NULLIF(CATERING, 0) AS catering,
+    NULLIF(WASHROOMS, 0) AS washrooms,
+    NULLIF(WIFI_CONNECTIVITY, 0) AS wifi_connectivity,
+    NULLIF(STAFF_SERVICE, 0) AS staff_service,
+    CAST(RECOMMENDED AS INTEGER) AS is_recommended,
+    UPDATED_AT AS updated_at
+FROM {{ source('skytrax_raw', 'RAW_LOUNGE_REVIEWS') }}

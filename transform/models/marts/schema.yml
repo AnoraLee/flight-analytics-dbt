@@ -1,0 +1,143 @@
+version: 2
+
+models:
+  - name: dim_airlines
+    description: "Dimension table containing master airline records from Skytrax."
+    columns:
+      - name: airline_id
+        description: "Primary key for airlines."
+        tests:
+          - unique
+          - not_null
+      - name: airline_name
+        description: "Cleaned official name of the airline."
+        tests:
+          - not_null
+
+  - name: dim_airports
+    description: "Dimension table containing master airport records from Skytrax."
+    columns:
+      - name: airport_id
+        description: "Primary key for airports."
+        tests:
+          - unique
+          - not_null
+      - name: airport_name
+        description: "Cleaned official name of the airport."
+        tests:
+          - not_null
+
+  - name: dim_dates
+    description: "Date spine dimension table covering 2010-01-01 to 2030-12-31 for time-intelligence analysis."
+    columns:
+      - name: date_key
+        description: "Primary date key (YYYY-MM-DD)."
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_airline_reviews
+    description: "Fact table of passenger airline reviews enriched with flight route, transit indicator, and unbiased overall review score."
+    columns:
+      - name: review_id
+        description: "Unique identifier of the airline review."
+        tests:
+          - unique
+          - not_null
+      - name: airline_id
+        description: "Foreign key to dim_airlines."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_airlines')
+                field: airline_id
+      - name: is_recommended
+        description: "Binary flag indicating whether the passenger recommends the airline (1 = Yes, 0 = No)."
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+                quote: false
+
+  - name: fct_airport_reviews
+    description: "Fact table of passenger airport reviews enriched with overall airport touchpoint score."
+    columns:
+      - name: review_id
+        description: "Unique identifier of the airport review."
+        tests:
+          - unique
+          - not_null
+      - name: airport_id
+        description: "Foreign key to dim_airports."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_airports')
+                field: airport_id
+      - name: is_recommended
+        description: "Binary flag indicating whether the passenger recommends the airport (1 = Yes, 0 = No)."
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+                quote: false
+
+  - name: fct_lounge_reviews
+    description: "Fact table of airport lounge reviews enriched with overall lounge quality score."
+    columns:
+      - name: review_id
+        description: "Unique identifier of the lounge review."
+        tests:
+          - unique
+          - not_null
+      - name: airline_id
+        description: "Foreign key to dim_airlines."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_airlines')
+                field: airline_id
+
+  - name: fct_seat_reviews
+    description: "Fact table of aircraft seat reviews enriched with overall seat comfort score."
+    columns:
+      - name: review_id
+        description: "Unique identifier of the seat review."
+        tests:
+          - unique
+          - not_null
+      - name: airline_id
+        description: "Foreign key to dim_airlines."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_airlines')
+                field: airline_id
+
+  - name: rpt_airline_yearly_performance
+    description: "Reporting mart tracking annual airline service scores, YoY score momentum, and net recommendation rates."
+    columns:
+      - name: airline_name
+        tests:
+          - not_null
+      - name: review_year
+        tests:
+          - not_null
+
+  - name: rpt_airline_amenities
+    description: "Reporting mart comparing hard-product (seat comfort) and ground-product (lounge quality) across airlines."
+    columns:
+      - name: airline_id
+        tests:
+          - unique
+          - not_null
+
+  - name: rpt_airport_bottlenecks
+    description: "Reporting mart identifying top airport operational bottlenecks based on queuing times and terminal cleanliness."
+    columns:
+      - name: airport_id
+        tests:
+          - unique
+          - not_null

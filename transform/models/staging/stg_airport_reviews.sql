@@ -1,0 +1,22 @@
+SELECT
+    REVIEW_ID AS review_id,
+    AIRPORT_ID AS airport_id,
+    CAST(VERIFY AS BOOLEAN) AS is_verified,
+    CAST(DATE_SUBMITTED AS DATE) AS date_submitted,
+    CAST(DATE_VISIT AS DATE) AS date_visit,
+    NULLIF(TRIM(CUSTOMER_NAME), '') AS customer_name,
+    NULLIF(TRIM(NATIONALITY), '') AS nationality,
+    NULLIF(TRIM(EXPERIENCE_AT_AIRPORT), '') AS experience_at_airport,
+    NULLIF(TRIM(TYPE_OF_TRAVELLER), '') AS type_of_traveller,
+    NULLIF(TRIM(REVIEW), '') AS review_text,
+    NULLIF(QUEUING_TIMES, 0) AS queuing_times,
+    NULLIF(TERMINAL_CLEANLINESS, 0) AS terminal_cleanliness,
+    NULLIF(TERMINAL_SEATING, 0) AS terminal_seating,
+    NULLIF(TERMINAL_SIGNS, 0) AS terminal_signs,
+    NULLIF(FOOD_BEVERAGES, 0) AS food_beverages,
+    NULLIF(AIRPORT_SHOPPING, 0) AS airport_shopping,
+    NULLIF(AIRPORT_STAFF, 0) AS airport_staff,
+    NULLIF(WIFI_CONNECTIVITY, 0) AS wifi_connectivity,
+    CAST(RECOMMENDED AS INTEGER) AS is_recommended,
+    UPDATED_AT AS updated_at
+FROM {{ source('skytrax_raw', 'RAW_AIRPORT_REVIEWS') }}
